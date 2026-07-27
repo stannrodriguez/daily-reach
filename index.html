@@ -4,197 +4,1053 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Reach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet" />
 <style>
-  :root {
-    --ink: #1B1C16;
-    --paper: #F3F5EF;
-    --card: #FBFCF9;
-    --line: #DDE1D6;
-    --muted: #6C7064;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: Georgia, "Times New Roman", serif;
-    background: var(--paper);
-    color: var(--ink);
-    min-height: 100vh;
-  }
-  .wrap { max-width: 1040px; margin: 0 auto; padding: 32px 24px 80px; }
+  html, body { margin: 0; padding: 0; background: #E9EBE3; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  button { font: inherit; color: inherit; background: none; border: none; padding: 0; cursor: pointer; }
+  input { font: inherit; color: inherit; }
+  a { color: #6D4AA0; text-decoration: none; }
+  a:hover { color: #1B1C16; }
+  ::selection { background: #DCD2EC; }
 
-  header {
+  .page {
+    min-height: 100vh;
+    background: #E9EBE3;
+    display: flex;
+    justify-content: center;
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    color: #1B1C16;
+  }
+  .shell {
+    width: 100%;
+    max-width: 460px;
+    background: #F3F5EF;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    transition: max-width 0.2s ease;
+  }
+
+  .serif { font-family: Newsreader, serif; }
+
+  /* ——— chips ——— */
+  .chip {
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    padding: 6px 13px;
+    border-radius: 100px;
+    border: 1px solid #DCDFD2;
+    color: #6E7263;
+    background: transparent;
+  }
+  .chip.on { border-color: #6D4AA0; color: #FFFFFF; background: #6D4AA0; }
+
+  /* ——— nav ——— */
+  .topnav { display: none; align-items: center; justify-content: space-between; padding: 22px 28px 0; }
+  .topnav .wordmark {
+    font-family: Newsreader, serif;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    min-height: 28px;
+  }
+  .topnav .links { display: flex; gap: 8px; }
+  .topnav .links button {
+    padding: 8px 14px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 100px;
+    color: #A6AA98;
+    background: transparent;
+  }
+  .topnav .links button.on { color: #1B1C16; background: #E9EBE0; }
+
+  .navbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .navbar .inner {
+    width: 100%;
+    max-width: 460px;
+    background: #F3F5EFF2;
+    backdrop-filter: blur(6px);
+    border-top: 1px solid #E3E6DA;
+    display: flex;
+    pointer-events: auto;
+    transition: max-width 0.2s ease;
+  }
+  .navbar button {
+    flex: 1;
+    padding: 16px 0 22px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #A6AA98;
+  }
+  .navbar button.on { color: #1B1C16; }
+
+  /* ——— home ——— */
+  .home { padding: 68px 28px 120px; }
+  .home .mark { font-family: Newsreader, serif; font-size: 56px; line-height: 1; letter-spacing: -0.02em; font-weight: 400; }
+  .home .tagline {
+    font-family: Newsreader, serif;
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.5;
+    color: #6E7263;
+    margin-top: 14px;
+    max-width: 300px;
+    text-wrap: pretty;
+  }
+  .home .rule { height: 1px; background: #DCDFD2; margin: 34px 0 30px; }
+
+  .resume {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: #6D4AA0;
+    border-radius: 3px;
+    padding: 18px 20px;
+    margin-bottom: 26px;
+  }
+  .resume:hover { background: #5A3C87; }
+  .resume .label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #DCD2EC; }
+  .resume .name { font-family: Newsreader, serif; font-size: 24px; line-height: 1.2; color: #FFFFFF; margin-top: 6px; }
+
+  .eyebrow { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A8E7E; }
+  .time-options { display: flex; gap: 8px; margin-top: 14px; }
+  .time-matches { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+  .match {
+    width: 100%;
+    text-align: left;
+    background: #FFFFFF;
+    border: 1px solid #E3E6DA;
+    border-radius: 3px;
+    padding: 18px 20px;
+  }
+  .match:hover { border-color: #6D4AA0; }
+  .match .row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  .match .name { font-family: Newsreader, serif; font-size: 24px; line-height: 1.2; }
+  .match .mins { font-size: 13px; color: #8A8E7E; white-space: nowrap; }
+  .match .note { display: block; font-size: 13px; line-height: 1.55; color: #6E7263; margin-top: 6px; text-wrap: pretty; }
+
+  .thought {
+    margin-top: 46px;
+    font-family: Newsreader, serif;
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.55;
+    color: #6D4AA0;
+    text-wrap: pretty;
+  }
+
+  /* ——— library ——— */
+  .library { padding: 60px 0 120px; }
+  .library .head { padding: 0 28px; }
+  .page-title { font-family: Newsreader, serif; font-size: 38px; line-height: 1; }
+  .library .count { font-size: 14px; color: #6E7263; margin-top: 10px; line-height: 1.5; }
+  .library .kinds { display: flex; gap: 8px; padding: 22px 28px 0; }
+  .library .tags { display: flex; gap: 8px; padding: 10px 28px 0; flex-wrap: wrap; }
+  .library .grid { padding: 0 28px; display: flex; flex-direction: column; gap: 20px; margin-top: 26px; }
+
+  .move { background: #FFFFFF; border: 1px solid #E3E6DA; border-radius: 3px; padding: 24px; }
+  .move .slot {
+    width: 100%;
+    aspect-ratio: 16/10;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    position: relative;
+    background: repeating-linear-gradient(45deg, #EDEFE7 0px, #EDEFE7 10px, #F3F5EF 10px, #F3F5EF 20px);
+  }
+  .move .slot .note {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: #9A9E8D;
+  }
+  .move .slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .move .row { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; }
+  .move .name { font-family: Newsreader, serif; font-size: 25px; line-height: 1.2; }
+  .move .kind { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #9A9E8D; white-space: nowrap; }
+  .move .text { font-size: 15px; line-height: 1.62; color: #3D4034; margin-top: 10px; text-wrap: pretty; }
+  .move .cue {
+    font-family: Newsreader, serif;
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.5;
+    color: #6D4AA0;
+    margin-top: 10px;
+    text-wrap: pretty;
+  }
+  .move .swap {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #6E7263;
+    margin-top: 10px;
+    padding-left: 14px;
+    border-left: 1px solid #C9CDBC;
+  }
+  .move .taglist { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px; }
+  .move .taglist span {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    color: #7B7F6E;
+    border: 1px solid #DCDFD2;
+    border-radius: 100px;
+    padding: 3px 9px;
+  }
+
+  /* ——— routines ——— */
+  .routines { padding: 60px 28px 120px; }
+  .routines .sub { font-size: 14px; color: #6E7263; margin-top: 10px; line-height: 1.5; max-width: 320px; text-wrap: pretty; }
+  .routines-list { display: flex; flex-direction: column; gap: 12px; margin-top: 28px; }
+  .routine-card {
+    background: #FFFFFF;
+    border: 1px solid #E3E6DA;
+    border-radius: 3px;
+    padding: 20px 22px;
+    text-align: left;
+    width: 100%;
+  }
+  .routine-card:hover { border-color: #6D4AA0; }
+  .routine-card .row { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; }
+  .routine-card .name { font-family: Newsreader, serif; font-size: 25px; line-height: 1.2; }
+  .routine-card .meta { font-size: 12px; color: #8A8E7E; white-space: nowrap; }
+  .routine-card .note { font-size: 14px; line-height: 1.55; color: #6E7263; margin-top: 7px; text-wrap: pretty; }
+
+  .build-cta {
+    margin-top: 26px;
+    width: 100%;
+    border: 1px dashed #C2C6B4;
+    border-radius: 3px;
+    padding: 16px;
+    font-size: 14px;
+    color: #4C5043;
+  }
+  .build-cta:hover { border-color: #6D4AA0; color: #6D4AA0; }
+
+  /* ——— routine detail + builder ——— */
+  .detail { padding: 24px 28px 140px; }
+  .back { font-size: 13px; color: #8A8E7E; padding: 12px 0; }
+  .back:hover { color: #1B1C16; }
+  .detail .title { font-family: Newsreader, serif; font-size: 40px; line-height: 1.05; margin-top: 12px; }
+  .detail .meta { font-size: 13px; color: #8A8E7E; margin-top: 10px; }
+  .detail .note { font-size: 15px; line-height: 1.6; color: #4C5043; margin-top: 14px; text-wrap: pretty; }
+  .detail .credit { font-family: Newsreader, serif; font-style: italic; font-size: 16px; color: #6D4AA0; margin-top: 10px; }
+  .detail .actions { display: flex; gap: 10px; margin-top: 24px; }
+  .btn-primary {
+    background: #6D4AA0;
+    color: #FFFFFF;
+    border-radius: 3px;
+    padding: 15px;
+    font-size: 15px;
+    letter-spacing: 0.01em;
+  }
+  .btn-primary:hover { background: #5A3C87; }
+  .detail .actions .btn-primary { flex: 1; }
+  .btn-quiet { border: 1px solid #E3E6DA; border-radius: 3px; padding: 15px 18px; font-size: 14px; color: #8A8E7E; }
+  .btn-quiet:hover { color: #1B1C16; }
+
+  .steps { margin-top: 34px; display: flex; flex-direction: column; }
+  .step { display: flex; gap: 16px; padding: 13px 0; border-top: 1px solid #E3E6DA; }
+  .step .n { font-size: 12px; color: #A6AA98; width: 22px; flex: none; padding-top: 5px; font-variant-numeric: tabular-nums; }
+  .step .mid { flex: 1; }
+  .step .name { font-family: Newsreader, serif; font-size: 20px; line-height: 1.3; }
+  .step .sub { font-size: 12px; color: #8A8E7E; margin-top: 3px; }
+  .step .dur { font-size: 13px; color: #6E7263; padding-top: 5px; font-variant-numeric: tabular-nums; }
+
+  .builder .title { font-family: Newsreader, serif; font-size: 36px; line-height: 1.05; margin-top: 12px; }
+  .builder .name-input {
+    width: 100%;
+    margin-top: 22px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #C2C6B4;
+    padding: 10px 0;
+    font-family: Newsreader, serif;
+    font-size: 24px;
+    outline: none;
+  }
+  .builder .bsteps { margin-top: 26px; }
+  .bstep { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-top: 1px solid #E3E6DA; }
+  .bstep .name { flex: 1; font-family: Newsreader, serif; font-size: 19px; }
+  .bstep input {
+    width: 62px;
+    background: #FFFFFF;
+    border: 1px solid #E3E6DA;
+    border-radius: 3px;
+    padding: 6px 8px;
+    font-size: 13px;
+    text-align: right;
+  }
+  .bstep .unit { font-size: 12px; color: #8A8E7E; }
+  .bstep .rm { font-size: 16px; color: #A6AA98; padding: 0 4px; }
+  .bstep .rm:hover { color: #6D4AA0; }
+  .builder .hint { font-size: 13px; color: #8A8E7E; margin-top: 14px; }
+  .builder .save { margin-top: 18px; width: 100%; }
+  .builder .add-head { margin-top: 40px; }
+  .builder .kinds { display: flex; gap: 8px; margin-top: 14px; }
+  .builder .picker { margin-top: 14px; }
+  .pick {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 28px;
-  }
-  h1 { font-size: 34px; font-weight: normal; letter-spacing: 0.5px; }
-  .tagline { color: var(--muted); font-size: 15px; font-style: italic; }
-
-  nav { display: flex; gap: 8px; margin-bottom: 32px; border-bottom: 1px solid var(--line); }
-  nav button {
-    appearance: none;
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    font: inherit;
-    font-size: 16px;
-    color: var(--muted);
-    padding: 10px 18px;
-    cursor: pointer;
-  }
-  nav button.active { color: var(--ink); border-bottom-color: var(--ink); }
-
-  .kind-heading {
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--muted);
-    margin: 36px 0 16px;
-  }
-  .kind-heading:first-child { margin-top: 0; }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-  }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  .card .slot {
-    aspect-ratio: 16 / 10;
-    background: var(--paper);
-    display: block;
+    gap: 12px;
     width: 100%;
+    text-align: left;
+    padding: 11px 0;
+    border-top: 1px solid #E3E6DA;
   }
-  .card img.slot { object-fit: cover; }
-  .card .placeholder {
-    background: repeating-linear-gradient(
-      -45deg,
-      var(--paper),
-      var(--paper) 10px,
-      #E9ECE2 10px,
-      #E9ECE2 20px
-    );
-  }
-  .card .body { padding: 14px 16px 18px; }
-  .card h3 { font-size: 18px; font-weight: normal; margin-bottom: 6px; }
-  .card p { font-size: 14px; line-height: 1.5; color: var(--muted); }
+  .pick:hover { color: #6D4AA0; }
+  .pick .name { font-family: Newsreader, serif; font-size: 19px; }
+  .pick .plus { font-size: 15px; color: #A6AA98; }
 
-  .today-list { display: grid; gap: 20px; max-width: 640px; }
-  .today-note { color: var(--muted); font-style: italic; margin-bottom: 20px; }
+  /* ——— player ——— */
+  .player {
+    position: fixed;
+    inset: 0;
+    background: #F3F5EF;
+    display: flex;
+    justify-content: center;
+    z-index: 20;
+  }
+  .player .col {
+    width: 100%;
+    max-width: 460px;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0 28px 34px;
+  }
+  .player .bar { height: 2px; background: #E3E6DA; margin: 0 -28px; }
+  .player .bar > div { height: 2px; background: #6D4AA0; width: 0%; }
+  .player .top { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+  .player .close { font-size: 13px; color: #8A8E7E; }
+  .player .close:hover { color: #1B1C16; }
+  .player .progress { font-size: 12px; color: #8A8E7E; font-variant-numeric: tabular-nums; }
+  .player .pinned { text-align: center; padding-top: 4px; }
+  .player .side { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #6D4AA0; height: 14px; }
+  .player .pose { font-family: Newsreader, serif; font-size: 34px; line-height: 1.15; margin-top: 10px; text-wrap: pretty; }
+  .player .scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: safe center;
+    text-align: center;
+    padding: 8px 0;
+  }
+  .breath {
+    position: relative;
+    width: 240px;
+    height: 240px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 26px 0 6px;
+  }
+  .breath .fill {
+    position: absolute;
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    background: #E4DDF1;
+    opacity: 0.55;
+    transform: scale(0.62);
+  }
+  .breath .ring { position: absolute; width: 240px; height: 240px; border-radius: 50%; border: 1px solid #DCDFD2; }
+  .breath .time {
+    position: relative;
+    font-family: Newsreader, serif;
+    font-size: 52px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+  .player .breath-label { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #8A8E7E; height: 16px; }
+  .player .text { font-size: 14px; line-height: 1.6; color: #4C5043; margin-top: 22px; max-width: 330px; text-wrap: pretty; }
+  .player .cue {
+    font-family: Newsreader, serif;
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.5;
+    color: #6D4AA0;
+    margin-top: 12px;
+    max-width: 330px;
+    text-wrap: pretty;
+  }
+  .player .controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-top: 1px solid #E3E6DA;
+    padding-top: 20px;
+  }
+  .player .controls .step-btn { font-size: 14px; color: #6E7263; padding: 8px 4px; }
+  .player .controls .step-btn:hover { color: #1B1C16; }
+  .player .controls .play { background: #6D4AA0; color: #FFFFFF; border-radius: 100px; padding: 13px 40px; font-size: 15px; }
+  .player .controls .play:hover { background: #5A3C87; }
+  .player .next { font-size: 12px; color: #A6AA98; text-align: center; margin-top: 12px; }
+
+  .hidden { display: none !important; }
+
+  /* ——— desktop ——— */
+  @media (min-width: 860px) {
+    .shell.wide { max-width: 920px; }
+    .topnav { display: flex; }
+    .navbar { display: none; }
+    .home { max-width: 720px; margin: 0 auto; padding-top: 96px; }
+    .time-matches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; align-items: stretch; }
+    .routines-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; align-items: stretch; }
+    .library .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <h1>Reach</h1>
-    <div class="tagline">a little yoga, a little strength, every day</div>
-  </header>
 
-  <nav>
-    <button id="tab-today" type="button">Today</button>
-    <button id="tab-library" type="button">Library</button>
-  </nav>
-
-  <main id="view"></main>
+<div class="page">
+  <div class="shell" id="shell">
+    <div class="topnav" id="topnav">
+      <div class="wordmark" id="topnav-wordmark"></div>
+      <div class="links" id="topnav-links"></div>
+    </div>
+    <div id="view"></div>
+  </div>
 </div>
+
+<div class="navbar" id="navbar"><div class="inner" id="navbar-links"></div></div>
+<div id="player-root"></div>
 
 <script src="reach-data.js"></script>
 <script>
-  const imageSet = new Set(IMAGES);
+(function () {
+  "use strict";
 
-  function cardEl(move) {
-    const card = document.createElement("div");
-    card.className = "card";
+  var BREATH_CYCLE = 8;
 
-    if (imageSet.has(move.id)) {
-      const img = document.createElement("img");
-      img.className = "slot";
-      img.src = "images/" + move.id + ".png";
-      img.alt = move.name;
-      img.loading = "lazy";
-      card.appendChild(img);
-    } else {
-      const ph = document.createElement("div");
-      ph.className = "slot placeholder";
-      card.appendChild(ph);
+  var state = {
+    ready: false,
+    moves: [], routines: [], thoughts: [], images: [], custom: [],
+    view: 'home',
+    kind: 'all', tag: 'all',
+    routineId: null,
+    timeFilter: 15,
+    resume: null,
+    player: null,
+    builderName: '', builderSteps: [],
+  };
+
+  // ——— tiny DOM helpers ———
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined && text !== null) n.textContent = text;
+    return n;
+  }
+  function btn(cls, text, onClick) {
+    var b = el('button', cls, text);
+    b.type = 'button';
+    if (onClick) b.addEventListener('click', onClick);
+    return b;
+  }
+  function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); }
+
+  // ——— storage ———
+  function load(key, fallback) {
+    try {
+      var raw = localStorage.getItem(key);
+      return raw === null ? fallback : JSON.parse(raw);
+    } catch (e) { return fallback; }
+  }
+  function save(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
+  }
+
+  // ——— data helpers ———
+  function allRoutines() { return state.routines.concat(state.custom); }
+  function routineById(id) {
+    var all = allRoutines();
+    for (var i = 0; i < all.length; i++) if (all[i].id === id) return all[i];
+    return undefined;
+  }
+  function moveById(id) {
+    for (var i = 0; i < state.moves.length; i++) if (state.moves[i].id === id) return state.moves[i];
+    return { id: id, name: id, text: '', tags: [] };
+  }
+  function expand(r) {
+    if (!r) return [];
+    var rounds = r.rounds || 1;
+    var out = [];
+    for (var i = 0; i < rounds; i++) {
+      r.steps.forEach(function (st) {
+        out.push({
+          id: st.id, sec: st.sec, side: st.side || '', reps: st.reps || '',
+          round: rounds > 1 ? 'Round ' + (i + 1) + ' of ' + rounds : '',
+        });
+      });
+    }
+    return out;
+  }
+  function fmt(sec) {
+    var m = Math.floor(sec / 60);
+    var s = sec % 60;
+    return m + ':' + String(s).padStart(2, '0');
+  }
+  function todaysThought() {
+    if (!state.thoughts.length) return '';
+    return state.thoughts[new Date().getDate() % state.thoughts.length];
+  }
+
+  // ——— navigation ———
+  function go(view) { state.view = view; render(); }
+
+  function openRoutine(id) {
+    var r = routineById(id);
+    state.resume = r ? { id: r.id, name: r.name } : null;
+    save('reach.resume', state.resume);
+    state.routineId = id;
+    state.view = 'routine';
+    render();
+  }
+
+  // ——— home ———
+  function renderHome() {
+    var root = el('div', 'home');
+
+    var head = el('div');
+    head.appendChild(el('div', 'mark', 'Reach'));
+    head.appendChild(el('div', 'tagline', 'Everything out of reach is just training away.'));
+    head.appendChild(el('div', 'rule'));
+    root.appendChild(head);
+
+    var body = el('div');
+
+    if (state.resume) {
+      var resume = btn('resume', null, function () { openRoutine(state.resume.id); });
+      resume.appendChild(el('div', 'label', 'Continue'));
+      resume.appendChild(el('div', 'name', state.resume.name));
+      body.appendChild(resume);
     }
 
-    const body = document.createElement("div");
-    body.className = "body";
-    const h3 = document.createElement("h3");
-    h3.textContent = move.name;
-    const p = document.createElement("p");
-    p.textContent = move.text;
-    body.appendChild(h3);
-    body.appendChild(p);
-    card.appendChild(body);
+    body.appendChild(el('div', 'eyebrow', 'How much time do you have?'));
+
+    var options = el('div', 'time-options');
+    [3, 5, 15, 28].forEach(function (m) {
+      options.appendChild(btn('chip' + (state.timeFilter === m ? ' on' : ''), m + ' min', function () {
+        state.timeFilter = m;
+        render();
+      }));
+    });
+    body.appendChild(options);
+
+    var matches = el('div', 'time-matches');
+    allRoutines()
+      .filter(function (r) { return r.mins <= state.timeFilter; })
+      .sort(function (a, b) { return b.mins - a.mins; })
+      .slice(0, 4)
+      .forEach(function (r) {
+        var b = btn('match', null, function () { openRoutine(r.id); });
+        var row = el('span', 'row');
+        row.appendChild(el('span', 'name', r.name));
+        row.appendChild(el('span', 'mins', r.mins + ' min'));
+        b.appendChild(row);
+        b.appendChild(el('span', 'note', r.note || ''));
+        matches.appendChild(b);
+      });
+    body.appendChild(matches);
+
+    body.appendChild(el('div', 'thought', todaysThought()));
+    root.appendChild(body);
+    return root;
+  }
+
+  // ——— library ———
+  var KINDS = [['all', 'All'], ['yoga', 'Yoga'], ['calisthenics', 'Calisthenics']];
+  var TAGS = [['all', 'Every tag'], ['toe-touch', 'toe-touch'], ['pull-up', 'pull-up'],
+              ['mobility', 'mobility'], ['strength', 'strength'], ['recovery', 'recovery']];
+
+  function kindChips(onPick) {
+    var wrap = el('div', 'kinds');
+    KINDS.forEach(function (pair) {
+      wrap.appendChild(btn('chip' + (state.kind === pair[0] ? ' on' : ''), pair[1], function () {
+        state.kind = pair[0];
+        onPick();
+      }));
+    });
+    return wrap;
+  }
+
+  function filteredMoves() {
+    return state.moves.filter(function (m) {
+      return (state.kind === 'all' || m.kind === state.kind) &&
+             (state.tag === 'all' || m.tags.indexOf(state.tag) > -1);
+    });
+  }
+
+  function moveCard(m) {
+    var card = el('div', 'move');
+
+    var slot = el('div', 'slot');
+    slot.appendChild(el('div', 'note', 'illustration · ' + m.name.toLowerCase()));
+    if (state.images.indexOf(m.id) > -1) {
+      var img = el('img');
+      img.src = 'images/' + m.id + '.png';
+      img.alt = m.name;
+      img.loading = 'lazy';
+      img.addEventListener('error', function () { img.style.display = 'none'; });
+      slot.appendChild(img);
+    }
+    card.appendChild(slot);
+
+    var row = el('div', 'row');
+    row.appendChild(el('div', 'name', m.name));
+    row.appendChild(el('div', 'kind', m.kind === 'yoga' ? 'Yoga' : 'Calisthenics'));
+    card.appendChild(row);
+
+    card.appendChild(el('div', 'text', m.text));
+    if (m.cue) card.appendChild(el('div', 'cue', m.cue));
+    if (m.swap) card.appendChild(el('div', 'swap', m.swap));
+
+    var tags = el('div', 'taglist');
+    m.tags.forEach(function (t) { tags.appendChild(el('span', null, t)); });
+    card.appendChild(tags);
     return card;
   }
 
-  function renderLibrary(view) {
-    for (const kind of ["yoga", "calisthenics"]) {
-      const heading = document.createElement("div");
-      heading.className = "kind-heading";
-      heading.textContent = kind;
-      view.appendChild(heading);
+  function renderLibrary() {
+    var root = el('div', 'library');
 
-      const grid = document.createElement("div");
-      grid.className = "grid";
-      for (const move of MOVES.filter((m) => m.kind === kind)) {
-        grid.appendChild(cardEl(move));
-      }
-      view.appendChild(grid);
-    }
+    var head = el('div', 'head');
+    head.appendChild(el('div', 'page-title', 'Library'));
+    var moves = filteredMoves();
+    head.appendChild(el('div', 'count', state.moves.length
+      ? moves.length + ' of ' + state.moves.length + ' moves — read them like a book.'
+      : 'Loading the shelf…'));
+    root.appendChild(head);
+
+    root.appendChild(kindChips(render));
+
+    var tags = el('div', 'tags');
+    TAGS.forEach(function (pair) {
+      tags.appendChild(btn('chip' + (state.tag === pair[0] ? ' on' : ''), pair[1], function () {
+        state.tag = pair[0];
+        render();
+      }));
+    });
+    root.appendChild(tags);
+
+    var grid = el('div', 'grid');
+    moves.forEach(function (m) { grid.appendChild(moveCard(m)); });
+    root.appendChild(grid);
+    return root;
   }
 
-  function renderToday(view) {
-    const note = document.createElement("p");
-    note.className = "today-note";
-    note.textContent = "Five moves for today. Take them slow.";
-    view.appendChild(note);
+  // ——— routines ———
+  function renderRoutines() {
+    var root = el('div', 'routines');
+    root.appendChild(el('div', 'page-title', 'Routines'));
+    root.appendChild(el('div', 'sub', 'Curated playlists of library moves. Start a timer, or just read one.'));
 
-    // Deterministic daily pick: seed from the date.
-    const d = new Date();
-    let seed = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
-    const rand = () => {
-      seed = (seed * 1103515245 + 12345) % 2147483648;
-      return seed / 2147483648;
+    var list = el('div', 'routines-list');
+    allRoutines().forEach(function (r) {
+      var b = btn('routine-card', null, function () { openRoutine(r.id); });
+      var row = el('div', 'row');
+      row.appendChild(el('span', 'name', r.name));
+      row.appendChild(el('span', 'meta', r.mins + ' min · ' + expand(r).length + ' moves'));
+      b.appendChild(row);
+      b.appendChild(el('div', 'note', r.note || ''));
+      list.appendChild(b);
+    });
+    root.appendChild(list);
+
+    root.appendChild(btn('build-cta', 'Build a routine', function () { go('builder'); }));
+    return root;
+  }
+
+  // ——— routine detail ———
+  function renderRoutine() {
+    var r = routineById(state.routineId);
+    var root = el('div', 'detail');
+    root.appendChild(btn('back', '← Routines', function () { go('routines'); }));
+    if (!r) return root;
+
+    var steps = expand(r);
+    root.appendChild(el('div', 'title', r.name));
+    root.appendChild(el('div', 'meta', r.mins + ' min · ' + steps.length + ' moves'));
+    root.appendChild(el('div', 'note', r.note || ''));
+    if (r.credit) root.appendChild(el('div', 'credit', r.credit));
+
+    var actions = el('div', 'actions');
+    actions.appendChild(btn('btn-primary', 'Start session', startPlayer));
+    if (r.custom) {
+      actions.appendChild(btn('btn-quiet', 'Delete', function () {
+        state.custom = state.custom.filter(function (c) { return c.id !== state.routineId; });
+        save('reach.custom', state.custom);
+        go('routines');
+      }));
+    }
+    root.appendChild(actions);
+
+    var list = el('div', 'steps');
+    steps.forEach(function (s, i) {
+      var m = moveById(s.id);
+      var bits = [];
+      if (s.round) bits.push(s.round);
+      if (s.side) bits.push(s.side);
+      if (s.reps) bits.push(s.reps);
+      if (!bits.length && m.tags && m.tags.length) bits.push(m.tags[0]);
+
+      var row = el('div', 'step');
+      row.appendChild(el('div', 'n', String(i + 1)));
+      var mid = el('div', 'mid');
+      mid.appendChild(el('div', 'name', m.name));
+      mid.appendChild(el('div', 'sub', bits.join(' · ')));
+      row.appendChild(mid);
+      row.appendChild(el('div', 'dur', fmt(s.sec)));
+      list.appendChild(row);
+    });
+    root.appendChild(list);
+    return root;
+  }
+
+  // ——— builder ———
+  function builderHintText() {
+    var steps = state.builderSteps;
+    if (!steps.length) return 'Pick moves below to start.';
+    var mins = Math.max(1, Math.round(steps.reduce(function (a, s) { return a + Number(s.sec || 0); }, 0) / 60));
+    return steps.length + ' moves · about ' + mins + ' min';
+  }
+
+  function renderBuilder() {
+    var root = el('div', 'detail builder');
+    root.appendChild(btn('back', '← Routines', function () { go('routines'); }));
+    root.appendChild(el('div', 'title', 'Build a routine'));
+
+    var nameInput = el('input', 'name-input');
+    nameInput.placeholder = 'Name it';
+    nameInput.value = state.builderName;
+    nameInput.addEventListener('input', function () { state.builderName = nameInput.value; });
+    root.appendChild(nameInput);
+
+    var hint = el('div', 'hint', builderHintText());
+
+    var list = el('div', 'bsteps');
+    state.builderSteps.forEach(function (b, i) {
+      var row = el('div', 'bstep');
+      row.appendChild(el('div', 'name', b.name));
+
+      var sec = el('input');
+      sec.type = 'number';
+      sec.value = String(b.sec);
+      sec.addEventListener('input', function () {
+        state.builderSteps[i].sec = sec.value;
+        hint.textContent = builderHintText();
+      });
+      row.appendChild(sec);
+
+      row.appendChild(el('span', 'unit', 'sec'));
+      row.appendChild(btn('rm', '×', function () {
+        state.builderSteps = state.builderSteps.filter(function (x, j) { return j !== i; });
+        render();
+      }));
+      list.appendChild(row);
+    });
+    root.appendChild(list);
+    root.appendChild(hint);
+
+    root.appendChild(btn('btn-primary save', 'Save routine', saveRoutine));
+
+    root.appendChild(el('div', 'eyebrow add-head', 'Add from library'));
+    root.appendChild(kindChips(render));
+
+    var picker = el('div', 'picker');
+    state.moves
+      .filter(function (m) { return state.kind === 'all' || m.kind === state.kind; })
+      .forEach(function (m) {
+        var b = btn('pick', null, function () {
+          state.builderSteps = state.builderSteps.concat([{ id: m.id, name: m.name, sec: 45 }]);
+          render();
+        });
+        b.appendChild(el('span', 'name', m.name));
+        b.appendChild(el('span', 'plus', '+'));
+        picker.appendChild(b);
+      });
+    root.appendChild(picker);
+    return root;
+  }
+
+  function saveRoutine() {
+    var steps = state.builderSteps;
+    if (!steps.length) return;
+    var total = Math.max(1, Math.round(steps.reduce(function (a, s) { return a + Number(s.sec || 0); }, 0) / 60));
+    var r = {
+      id: 'c' + Date.now(),
+      name: state.builderName.trim() || 'Untitled routine',
+      mins: total,
+      note: 'Your routine.',
+      custom: true,
+      checkin: false,
+      steps: steps.map(function (s) { return { id: s.id, sec: Number(s.sec) || 30, side: '', reps: '' }; }),
     };
-    const pool = [...MOVES];
-    const picks = [];
-    while (picks.length < 5 && pool.length) {
-      picks.push(pool.splice(Math.floor(rand() * pool.length), 1)[0]);
-    }
-
-    const list = document.createElement("div");
-    list.className = "today-list";
-    for (const move of picks) list.appendChild(cardEl(move));
-    view.appendChild(list);
+    state.custom = state.custom.concat([r]);
+    save('reach.custom', state.custom);
+    state.builderName = '';
+    state.builderSteps = [];
+    openRoutine(r.id);
   }
 
-  const tabs = {
-    today: { btn: document.getElementById("tab-today"), render: renderToday },
-    library: { btn: document.getElementById("tab-library"), render: renderLibrary },
-  };
+  // ——— player ———
+  var playerRoot = document.getElementById('player-root');
+  var ui = null; // cached player nodes
 
-  function show(name) {
-    const view = document.getElementById("view");
-    view.innerHTML = "";
-    for (const [key, tab] of Object.entries(tabs)) {
-      tab.btn.classList.toggle("active", key === name);
-    }
-    tabs[name].render(view);
+  function startPlayer() {
+    var r = routineById(state.routineId);
+    var steps = expand(r);
+    if (!steps.length) return;
+    state.player = {
+      routineId: r.id, i: 0, steps: steps,
+      endAt: Date.now() + steps[0].sec * 1000,
+      left: steps[0].sec * 1000,
+      playing: true,
+      breathStart: Date.now(),
+    };
+    state.view = 'player';
+    render();
   }
 
-  tabs.today.btn.addEventListener("click", () => show("today"));
-  tabs.library.btn.addEventListener("click", () => show("library"));
-  show("today");
+  function goStep(i) {
+    var p = state.player;
+    if (!p) return;
+    if (i >= p.steps.length) { finishPlayer(); return; }
+    if (i < 0) i = 0;
+    p.i = i;
+    p.endAt = Date.now() + p.steps[i].sec * 1000;
+    p.left = p.steps[i].sec * 1000;
+    p.breathStart = Date.now();
+    if (!p.playing) { p.playing = true; }
+    renderStep();
+  }
+
+  function finishPlayer() {
+    state.player = null;
+    state.view = 'routines';
+    render();
+  }
+
+  function exitPlayer() {
+    state.player = null;
+    state.view = 'routine';
+    render();
+  }
+
+  function togglePlay() {
+    var p = state.player;
+    if (!p) return;
+    if (p.playing) {
+      p.playing = false;
+      p.left = Math.max(0, p.endAt - Date.now());
+    } else {
+      p.playing = true;
+      p.endAt = Date.now() + p.left;
+      p.breathStart = Date.now();
+    }
+    ui.play.textContent = p.playing ? 'Pause' : 'Resume';
+  }
+
+  function buildPlayer() {
+    var wrap = el('div', 'player');
+    var col = el('div', 'col');
+
+    var bar = el('div', 'bar');
+    var fill = el('div');
+    bar.appendChild(fill);
+    col.appendChild(bar);
+
+    var top = el('div', 'top');
+    top.appendChild(btn('close', 'Close', exitPlayer));
+    var progress = el('div', 'progress');
+    top.appendChild(progress);
+    col.appendChild(top);
+
+    var pinned = el('div', 'pinned');
+    var side = el('div', 'side');
+    var pose = el('div', 'pose');
+    pinned.appendChild(side);
+    pinned.appendChild(pose);
+    col.appendChild(pinned);
+
+    var scroll = el('div', 'scroll');
+    var breath = el('div', 'breath');
+    var breathFill = el('div', 'fill');
+    var time = el('div', 'time');
+    breath.appendChild(breathFill);
+    breath.appendChild(el('div', 'ring'));
+    breath.appendChild(time);
+    scroll.appendChild(breath);
+    var breathLabel = el('div', 'breath-label');
+    scroll.appendChild(breathLabel);
+    var text = el('div', 'text');
+    scroll.appendChild(text);
+    var cue = el('div', 'cue');
+    scroll.appendChild(cue);
+    col.appendChild(scroll);
+
+    var controls = el('div', 'controls');
+    controls.appendChild(btn('step-btn', 'Back', function () { goStep(state.player.i - 1); }));
+    var play = btn('play', 'Pause', togglePlay);
+    controls.appendChild(play);
+    controls.appendChild(btn('step-btn', 'Skip', function () { goStep(state.player.i + 1); }));
+    col.appendChild(controls);
+
+    var next = el('div', 'next');
+    col.appendChild(next);
+
+    wrap.appendChild(col);
+    playerRoot.appendChild(wrap);
+
+    ui = { fill: fill, progress: progress, side: side, pose: pose, breathFill: breathFill,
+           time: time, breathLabel: breathLabel, text: text, cue: cue, play: play, next: next };
+  }
+
+  function renderStep() {
+    var p = state.player;
+    if (!p || !ui) return;
+    var s = p.steps[p.i];
+    var m = moveById(s.id);
+    var nxt = p.steps[p.i + 1];
+
+    ui.side.textContent = s.side || s.round || '';
+    ui.pose.textContent = m.name;
+    ui.text.textContent = m.text;
+
+    var openingThought = p.i === 0 && s.id === 'childs_pose' && state.thoughts.length;
+    var cue = openingThought ? 'A thought to sit with — ' + todaysThought() : (m.cue || '');
+    ui.cue.textContent = cue;
+    ui.cue.classList.toggle('hidden', !cue);
+
+    ui.progress.textContent = (p.i + 1) + ' / ' + p.steps.length;
+    ui.next.textContent = nxt
+      ? 'Next — ' + moveById(nxt.id).name + (nxt.side ? ' · ' + nxt.side : '')
+      : 'Last one.';
+    ui.play.textContent = p.playing ? 'Pause' : 'Resume';
+    paintTime();
+  }
+
+  function paintTime() {
+    var p = state.player;
+    var s = p.steps[p.i];
+    var left = Math.max(0, Math.ceil(p.left / 1000));
+    ui.time.textContent = fmt(left);
+    var pct = Math.round(((p.i + (1 - p.left / (s.sec * 1000))) / p.steps.length) * 100);
+    ui.fill.style.width = pct + '%';
+  }
+
+  function tick() {
+    var p = state.player;
+    if (!p || !p.playing || !ui) return;
+    var now = Date.now();
+    if (now >= p.endAt) { goStep(p.i + 1); return; }
+
+    var r = routineById(p.routineId);
+    var b = (r && r.breath) || { cycle: BREATH_CYCLE, inhale: Math.round(BREATH_CYCLE / 2) };
+    var t = ((now - p.breathStart) / 1000) % b.cycle;
+    var inhaling = t < b.inhale;
+    var prog = inhaling ? t / b.inhale : (t - b.inhale) / (b.cycle - b.inhale);
+    var eased = (1 - Math.cos(Math.PI * prog)) / 2;
+    var scale = inhaling ? 0.6 + 0.4 * eased : 1 - 0.4 * eased;
+
+    ui.breathFill.style.transform = 'scale(' + (Math.round(scale * 1000) / 1000) + ')';
+    ui.breathLabel.textContent = inhaling ? 'Inhale' : 'Exhale';
+    p.left = p.endAt - now;
+    paintTime();
+  }
+
+  // ——— chrome ———
+  var NAV = [['home', 'Home'], ['library', 'Library'], ['routines', 'Routines']];
+
+  function renderNav(container) {
+    clear(container);
+    NAV.forEach(function (pair) {
+      var active = state.view === pair[0] ||
+        (pair[0] === 'routines' && (state.view === 'routine' || state.view === 'builder'));
+      container.appendChild(btn(active ? 'on' : null, pair[1], function () { go(pair[0]); }));
+    });
+  }
+
+  function render() {
+    var view = state.view;
+    var shell = document.getElementById('shell');
+    var viewRoot = document.getElementById('view');
+
+    shell.classList.toggle('wide', view === 'home' || view === 'library' || view === 'routines');
+
+    var inPlayer = view === 'player';
+    document.getElementById('topnav').classList.toggle('hidden', inPlayer);
+    document.getElementById('navbar').classList.toggle('hidden', inPlayer);
+    document.getElementById('topnav-wordmark').textContent = view === 'home' ? '' : 'Reach';
+    renderNav(document.getElementById('topnav-links'));
+    renderNav(document.getElementById('navbar-links'));
+
+    if (inPlayer) {
+      if (!ui) buildPlayer();
+      renderStep();
+    } else if (ui) {
+      clear(playerRoot);
+      ui = null;
+    }
+
+    clear(viewRoot);
+    if (view === 'home') viewRoot.appendChild(renderHome());
+    else if (view === 'library') viewRoot.appendChild(renderLibrary());
+    else if (view === 'routines') viewRoot.appendChild(renderRoutines());
+    else if (view === 'routine') viewRoot.appendChild(renderRoutine());
+    else if (view === 'builder') viewRoot.appendChild(renderBuilder());
+  }
+
+  // ——— boot ———
+  function boot() {
+    var d = window.REACH_DATA;
+    if (!d) { setTimeout(boot, 60); return; }
+    state.moves = d.MOVES;
+    state.routines = d.ROUTINES;
+    state.thoughts = d.THOUGHTS;
+    state.images = d.IMAGES || [];
+    state.custom = load('reach.custom', []) || [];
+    state.resume = load('reach.resume', null);
+    state.ready = true;
+
+    // A resume entry for a routine that no longer exists is stale.
+    if (state.resume && !routineById(state.resume.id)) {
+      state.resume = null;
+      save('reach.resume', null);
+    }
+
+    render();
+    setInterval(tick, 100);
+  }
+
+  boot();
+})();
 </script>
 </body>
 </html>
