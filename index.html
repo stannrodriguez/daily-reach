@@ -113,6 +113,7 @@
   }
   .home .rule { height: 1px; background: #DCDFD2; margin: 34px 0 30px; }
 
+  .resume-wrap { position: relative; margin-bottom: 26px; }
   .resume {
     display: block;
     width: 100%;
@@ -120,11 +121,31 @@
     background: #6D4AA0;
     border-radius: 3px;
     padding: 18px 20px;
-    margin-bottom: 26px;
   }
   .resume:hover { background: #5A3C87; }
   .resume .label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #DCD2EC; }
-  .resume .name { font-family: Newsreader, serif; font-size: 24px; line-height: 1.2; color: #FFFFFF; margin-top: 6px; }
+  .resume .name { font-family: Newsreader, serif; font-size: 24px; line-height: 1.2; color: #FFFFFF; margin-top: 6px; padding-right: 26px; }
+  .resume .at { display: flex; align-items: center; gap: 9px; font-size: 13px; color: #DCD2EC; margin-top: 9px; }
+  .resume .at .thumb {
+    width: 40px;
+    height: 28px;
+    border-radius: 2px;
+    overflow: hidden;
+    flex: none;
+    background: #FFFFFF29;
+  }
+  .resume .at .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.5); }
+  .resume-clear {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 15px;
+    line-height: 1;
+    color: #C5B4E0;
+    padding: 8px 11px;
+    border-radius: 100px;
+  }
+  .resume-clear:hover { color: #FFFFFF; background: #00000026; }
 
   .eyebrow { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A8E7E; }
   .time-options { display: flex; gap: 8px; margin-top: 14px; }
@@ -341,9 +362,20 @@
   }
   .player .bar { height: 2px; background: #E3E6DA; margin: 0 -28px; }
   .player .bar > div { height: 2px; background: #6D4AA0; width: 0%; }
-  .player .top { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+  .player .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0; }
+  .player .top .right { display: flex; align-items: center; gap: 14px; }
   .player .close { font-size: 13px; color: #8A8E7E; }
   .player .close:hover { color: #1B1C16; }
+  .player .sound {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #A6AA98;
+    border: 1px solid #E3E6DA;
+    border-radius: 100px;
+    padding: 5px 11px;
+  }
+  .player .sound.on { color: #6D4AA0; border-color: #D3C6E6; background: #F0EBF7; }
   .player .progress { font-size: 12px; color: #8A8E7E; font-variant-numeric: tabular-nums; }
   .player .pinned { text-align: center; padding-top: 4px; }
   .player .side { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #6D4AA0; height: 14px; }
@@ -359,6 +391,33 @@
     text-align: center;
     padding: 8px 0;
   }
+  .player .illus {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 16/10;
+    max-height: 28vh;
+    flex: none;
+    margin-top: 14px;
+    border-radius: 3px;
+    overflow: hidden;
+    background: repeating-linear-gradient(45deg, #EDEFE7 0px, #EDEFE7 10px, #F3F5EF 10px, #F3F5EF 20px);
+  }
+  .player .illus .note {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: #9A9E8D;
+    padding: 0 12px;
+    text-align: center;
+  }
+  .player .illus img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
   .breath {
     position: relative;
     width: 240px;
@@ -367,7 +426,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 26px 0 6px;
+    margin: 18px 0 6px;
   }
   .breath .fill {
     position: absolute;
@@ -410,9 +469,48 @@
   .player .controls .step-btn:hover { color: #1B1C16; }
   .player .controls .play { background: #6D4AA0; color: #FFFFFF; border-radius: 100px; padding: 13px 40px; font-size: 15px; }
   .player .controls .play:hover { background: #5A3C87; }
-  .player .next { font-size: 12px; color: #A6AA98; text-align: center; margin-top: 12px; }
+  .player .next {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-height: 28px;
+    font-size: 12px;
+    color: #A6AA98;
+    margin-top: 12px;
+  }
+  .player .next .thumb {
+    width: 46px;
+    height: 30px;
+    border-radius: 2px;
+    overflow: hidden;
+    flex: none;
+    background: repeating-linear-gradient(45deg, #EDEFE7 0px, #EDEFE7 6px, #F3F5EF 6px, #F3F5EF 12px);
+  }
+  /* the figures sit small inside their frame — zoom in so they read at thumbnail size */
+  .player .next .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transform: scale(1.5); }
+  .player .next .thumb.empty { display: none; }
+
+  /* ——— the beat between moves ——— */
+  .player.is-transition .side { color: #6D4AA0; }
+  .player.is-transition .pose { color: #6D4AA0; }
+  .player.is-transition .breath .fill { background: #DCD2EC; opacity: 0.7; }
+  .player.is-transition .breath .time { font-size: 66px; color: #6D4AA0; }
+  .player.is-transition .illus { box-shadow: 0 0 0 1px #D3C6E6; }
 
   .hidden { display: none !important; }
+
+  /* ——— short screens: keep image + timer on one glance ——— */
+  @media (max-height: 900px) {
+    .breath, .breath .fill, .breath .ring { width: 172px; height: 172px; }
+    .breath .time { font-size: 38px; }
+    .player.is-transition .breath .time { font-size: 52px; }
+    .breath { margin: 10px 0 2px; }
+    .player .illus { max-width: 260px; margin-top: 8px; }
+    .player .pose { font-size: 27px; }
+    .player .text { margin-top: 12px; }
+    .player .cue { margin-top: 8px; }
+  }
 
   /* ——— desktop ——— */
   @media (min-width: 860px) {
@@ -447,6 +545,7 @@
   "use strict";
 
   var BREATH_CYCLE = 8;
+  var TRANSITION_SEC = 4; // the beat between moves
 
   var state = {
     ready: false,
@@ -457,6 +556,7 @@
     timeFilter: 15,
     resume: null,
     player: null,
+    sound: true,
     builderName: '', builderSteps: [],
   };
 
@@ -521,16 +621,57 @@
     return state.thoughts[new Date().getDate() % state.thoughts.length];
   }
 
+  function imagePath(id) {
+    return state.images.indexOf(id) > -1 ? 'images/' + id + '.png' : '';
+  }
+  function thumbFor(id, cls) {
+    var wrap = el('div', cls || 'thumb');
+    var src = imagePath(id);
+    if (!src) { wrap.classList.add('empty'); return wrap; }
+    var img = el('img');
+    img.src = src;
+    img.alt = '';
+    img.loading = 'lazy';
+    img.addEventListener('error', function () { wrap.classList.add('empty'); });
+    wrap.appendChild(img);
+    return wrap;
+  }
+
   // ——— navigation ———
   function go(view) { state.view = view; render(); }
 
+  // Viewing a routine is browsing, not a session — it never writes a resume point.
   function openRoutine(id) {
-    var r = routineById(id);
-    state.resume = r ? { id: r.id, name: r.name } : null;
-    save('reach.resume', state.resume);
     state.routineId = id;
     state.view = 'routine';
     render();
+  }
+
+  // ——— resume: an actual place in an actual session ———
+  function saveResume() {
+    var p = state.player;
+    if (!p) return;
+    var r = routineById(p.routineId);
+    if (!r) return;
+    // Mid-transition, the place to come back to is the move you were heading into.
+    var i = p.phase === 'transition' ? Math.min(p.i + 1, p.steps.length - 1) : p.i;
+    var s = p.steps[i];
+    state.resume = {
+      id: r.id, name: r.name, i: i, total: p.steps.length,
+      step: moveById(s.id).name, moveId: s.id, side: s.side || '',
+    };
+    save('reach.resume', state.resume);
+  }
+  function clearResume() {
+    state.resume = null;
+    save('reach.resume', null);
+  }
+  function resumeSession() {
+    var res = state.resume;
+    if (!res) return;
+    if (!routineById(res.id)) { clearResume(); render(); return; }
+    state.routineId = res.id;
+    startPlayer(res.i);
   }
 
   // ——— home ———
@@ -546,10 +687,23 @@
     var body = el('div');
 
     if (state.resume) {
-      var resume = btn('resume', null, function () { openRoutine(state.resume.id); });
+      var res = state.resume;
+      var wrap = el('div', 'resume-wrap');
+      var resume = btn('resume', null, resumeSession);
       resume.appendChild(el('div', 'label', 'Continue'));
-      resume.appendChild(el('div', 'name', state.resume.name));
-      body.appendChild(resume);
+      resume.appendChild(el('div', 'name', res.name));
+
+      var at = el('div', 'at');
+      at.appendChild(thumbFor(res.moveId));
+      at.appendChild(el('span', null,
+        'Step ' + (res.i + 1) + ' of ' + res.total + ' · ' + res.step + (res.side ? ' · ' + res.side : '')));
+      resume.appendChild(at);
+      wrap.appendChild(resume);
+
+      var clearBtn = btn('resume-clear', '×', function () { clearResume(); render(); });
+      clearBtn.setAttribute('aria-label', 'Discard saved session');
+      wrap.appendChild(clearBtn);
+      body.appendChild(wrap);
     }
 
     body.appendChild(el('div', 'eyebrow', 'How much time do you have?'));
@@ -700,12 +854,20 @@
     root.appendChild(el('div', 'note', r.note || ''));
     if (r.credit) root.appendChild(el('div', 'credit', r.credit));
 
+    var res = state.resume;
+    var canResume = res && res.id === r.id && res.i > 0 && res.i < steps.length;
+
     var actions = el('div', 'actions');
-    actions.appendChild(btn('btn-primary', 'Start session', startPlayer));
+    actions.appendChild(btn('btn-primary', canResume ? 'Start over' : 'Start session',
+      function () { startPlayer(0); }));
+    if (canResume) {
+      actions.appendChild(btn('btn-quiet', 'Resume at ' + (res.i + 1), resumeSession));
+    }
     if (r.custom) {
       actions.appendChild(btn('btn-quiet', 'Delete', function () {
         state.custom = state.custom.filter(function (c) { return c.id !== state.routineId; });
         save('reach.custom', state.custom);
+        if (state.resume && state.resume.id === state.routineId) clearResume();
         go('routines');
       }));
     }
@@ -819,45 +981,168 @@
     openRoutine(r.id);
   }
 
+  // ——— sound: a chime and a voice, so the screen is optional ———
+  var actx = null;
+
+  function initAudio() {
+    if (!state.sound) return;
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      if (!actx) actx = new AC();
+      if (actx.state === 'suspended') actx.resume();
+    } catch (e) { actx = null; }
+  }
+
+  function tone(freq, delay, dur, peak) {
+    var t0 = actx.currentTime + delay;
+    var osc = actx.createOscillator();
+    var gain = actx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(peak, t0 + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    osc.connect(gain);
+    gain.connect(actx.destination);
+    osc.start(t0);
+    osc.stop(t0 + dur + 0.05);
+  }
+
+  function chime(kind) {
+    if (!state.sound || !actx) return;
+    try {
+      if (kind === 'transition') { tone(659.25, 0, 0.9, 0.09); tone(987.77, 0.15, 1.1, 0.055); }
+      else if (kind === 'begin') { tone(523.25, 0, 0.75, 0.06); }
+      else if (kind === 'done') { tone(523.25, 0, 0.8, 0.07); tone(659.25, 0.2, 0.9, 0.06); tone(783.99, 0.4, 1.6, 0.055); }
+    } catch (e) {}
+  }
+
+  function speak(text) {
+    if (!state.sound || !text) return;
+    var synth = window.speechSynthesis;
+    if (!synth || typeof SpeechSynthesisUtterance !== 'function') return;
+    try {
+      var u = new SpeechSynthesisUtterance(text);
+      u.rate = 0.92;
+      u.volume = 0.9;
+      synth.cancel();
+      synth.speak(u);
+    } catch (e) {}
+  }
+  function hush() {
+    try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
+  }
+
+  function announce(step, prefix) {
+    var m = moveById(step.id);
+    speak((prefix || '') + m.name + (step.side ? '. ' + step.side : '') + (step.reps ? '. ' + step.reps : ''));
+  }
+
+  function toggleSound() {
+    state.sound = !state.sound;
+    save('reach.sound', state.sound);
+    if (state.sound) { initAudio(); chime('begin'); } else { hush(); }
+    if (ui) {
+      ui.sound.textContent = state.sound ? 'Sound on' : 'Sound off';
+      ui.sound.classList.toggle('on', state.sound);
+    }
+  }
+
+  // ——— wake lock: a 90-second hold shouldn't end in a black screen ———
+  var wakeLock = null;
+
+  function requestWakeLock() {
+    if (!navigator.wakeLock || wakeLock) return;
+    try {
+      navigator.wakeLock.request('screen').then(function (lock) {
+        wakeLock = lock;
+        lock.addEventListener('release', function () { wakeLock = null; });
+      }, function () {});
+    } catch (e) {}
+  }
+  function releaseWakeLock() {
+    if (!wakeLock) return;
+    try { wakeLock.release(); } catch (e) {}
+    wakeLock = null;
+  }
+  document.addEventListener('visibilitychange', function () {
+    if (!state.player) return;
+    if (document.visibilityState === 'visible') requestWakeLock();
+    else saveResume();
+  });
+  window.addEventListener('pagehide', function () { if (state.player) saveResume(); });
+
   // ——— player ———
   var playerRoot = document.getElementById('player-root');
   var ui = null; // cached player nodes
 
-  function startPlayer() {
+  function startPlayer(startIndex) {
     var r = routineById(state.routineId);
     var steps = expand(r);
     if (!steps.length) return;
+    var i = Math.min(Math.max(0, Number(startIndex) || 0), steps.length - 1);
     state.player = {
-      routineId: r.id, i: 0, steps: steps,
-      endAt: Date.now() + steps[0].sec * 1000,
-      left: steps[0].sec * 1000,
+      routineId: r.id, i: i, steps: steps,
+      phase: 'move',
+      endAt: Date.now() + steps[i].sec * 1000,
+      left: steps[i].sec * 1000,
       playing: true,
       breathStart: Date.now(),
     };
     state.view = 'player';
+    initAudio(); // we're inside a click, which is the only place this is allowed
+    requestWakeLock();
+    saveResume();
     render();
+    announce(steps[i]); // also warms up the speech engine for later transitions
   }
 
-  function goStep(i) {
+  function goStep(i, spoken) {
     var p = state.player;
     if (!p) return;
     if (i >= p.steps.length) { finishPlayer(); return; }
     if (i < 0) i = 0;
     p.i = i;
+    p.phase = 'move';
     p.endAt = Date.now() + p.steps[i].sec * 1000;
     p.left = p.steps[i].sec * 1000;
     p.breathStart = Date.now();
-    if (!p.playing) { p.playing = true; }
+    p.playing = true;
+    chime('begin');
+    if (!spoken) announce(p.steps[i]);
+    saveResume();
+    renderStep();
+  }
+
+  // The beat between moves: a few seconds of "here's what's coming".
+  function beginTransition() {
+    var p = state.player;
+    var nxt = p.steps[p.i + 1];
+    if (!nxt) { finishPlayer(); return; }
+    p.phase = 'transition';
+    p.endAt = Date.now() + TRANSITION_SEC * 1000;
+    p.left = TRANSITION_SEC * 1000;
+    chime('transition');
+    announce(nxt, 'Next. ');
+    saveResume();
     renderStep();
   }
 
   function finishPlayer() {
+    chime('done');
+    speak('Done.');
+    clearResume();
+    releaseWakeLock();
     state.player = null;
     state.view = 'routines';
     render();
   }
 
   function exitPlayer() {
+    saveResume(); // where you actually left off
+    hush();
+    releaseWakeLock();
     state.player = null;
     state.view = 'routine';
     render();
@@ -869,6 +1154,8 @@
     if (p.playing) {
       p.playing = false;
       p.left = Math.max(0, p.endAt - Date.now());
+      hush();
+      saveResume();
     } else {
       p.playing = true;
       p.endAt = Date.now() + p.left;
@@ -888,8 +1175,12 @@
 
     var top = el('div', 'top');
     top.appendChild(btn('close', 'Close', exitPlayer));
+    var right = el('div', 'right');
+    var sound = btn('sound' + (state.sound ? ' on' : ''), state.sound ? 'Sound on' : 'Sound off', toggleSound);
+    right.appendChild(sound);
     var progress = el('div', 'progress');
-    top.appendChild(progress);
+    right.appendChild(progress);
+    top.appendChild(right);
     col.appendChild(top);
 
     var pinned = el('div', 'pinned');
@@ -900,6 +1191,16 @@
     col.appendChild(pinned);
 
     var scroll = el('div', 'scroll');
+
+    var illus = el('div', 'illus');
+    var illusNote = el('div', 'note');
+    var illusImg = el('img');
+    illusImg.alt = '';
+    illusImg.addEventListener('error', function () { illusImg.classList.add('hidden'); });
+    illus.appendChild(illusNote);
+    illus.appendChild(illusImg);
+    scroll.appendChild(illus);
+
     var breath = el('div', 'breath');
     var breathFill = el('div', 'fill');
     var time = el('div', 'time');
@@ -916,72 +1217,142 @@
     col.appendChild(scroll);
 
     var controls = el('div', 'controls');
-    controls.appendChild(btn('step-btn', 'Back', function () { goStep(state.player.i - 1); }));
+    var back = btn('step-btn', 'Back', function () {
+      var p = state.player;
+      // Mid-beat, "Back" means "let me stay where I was a moment longer".
+      goStep(p.phase === 'transition' ? p.i : p.i - 1);
+    });
+    controls.appendChild(back);
     var play = btn('play', 'Pause', togglePlay);
     controls.appendChild(play);
-    controls.appendChild(btn('step-btn', 'Skip', function () { goStep(state.player.i + 1); }));
+    var skip = btn('step-btn', 'Skip', function () {
+      var p = state.player;
+      goStep(p.i + 1, p.phase === 'transition');
+    });
+    controls.appendChild(skip);
     col.appendChild(controls);
 
     var next = el('div', 'next');
+    var nextThumb = el('div', 'thumb');
+    var nextThumbImg = el('img');
+    nextThumbImg.alt = '';
+    nextThumbImg.addEventListener('error', function () { nextThumb.classList.add('empty'); });
+    nextThumb.appendChild(nextThumbImg);
+    var nextText = el('span');
+    next.appendChild(nextThumb);
+    next.appendChild(nextText);
     col.appendChild(next);
 
     wrap.appendChild(col);
     playerRoot.appendChild(wrap);
 
-    ui = { fill: fill, progress: progress, side: side, pose: pose, breathFill: breathFill,
-           time: time, breathLabel: breathLabel, text: text, cue: cue, play: play, next: next };
+    ui = { wrap: wrap, fill: fill, progress: progress, side: side, pose: pose, breathFill: breathFill,
+           time: time, breathLabel: breathLabel, text: text, cue: cue, play: play, sound: sound,
+           back: back, skip: skip, illus: illus, illusImg: illusImg, illusNote: illusNote,
+           nextThumb: nextThumb, nextThumbImg: nextThumbImg, nextText: nextText };
+  }
+
+  function paintIllus(m) {
+    ui.illusNote.textContent = 'illustration · ' + m.name.toLowerCase();
+    var src = imagePath(m.id);
+    if (!src) { ui.illusImg.classList.add('hidden'); return; }
+    if (ui.illusImg.getAttribute('src') !== src) ui.illusImg.setAttribute('src', src);
+    ui.illusImg.alt = m.name;
+    ui.illusImg.classList.remove('hidden');
+  }
+
+  function paintNextThumb(id) {
+    var src = id ? imagePath(id) : '';
+    if (!src) { ui.nextThumb.classList.add('empty'); return; }
+    if (ui.nextThumbImg.getAttribute('src') !== src) ui.nextThumbImg.setAttribute('src', src);
+    ui.nextThumb.classList.remove('empty');
+  }
+
+  function preload(id) {
+    var src = id ? imagePath(id) : '';
+    if (src) { var img = new Image(); img.src = src; }
   }
 
   function renderStep() {
     var p = state.player;
     if (!p || !ui) return;
-    var s = p.steps[p.i];
-    var m = moveById(s.id);
-    var nxt = p.steps[p.i + 1];
+    var transition = p.phase === 'transition';
+    // In the beat between moves, the screen belongs to the move you're heading into.
+    var shown = transition ? p.steps[p.i + 1] : p.steps[p.i];
+    var upcoming = transition ? p.steps[p.i + 2] : p.steps[p.i + 1];
+    var m = moveById(shown.id);
 
-    ui.side.textContent = s.side || s.round || '';
+    ui.wrap.classList.toggle('is-transition', transition);
+    ui.side.textContent = transition
+      ? 'Next' + (shown.side ? ' · ' + shown.side : '')
+      : (shown.side || shown.round || '');
     ui.pose.textContent = m.name;
     ui.text.textContent = m.text;
+    paintIllus(m);
 
-    var openingThought = p.i === 0 && s.id === 'childs_pose' && state.thoughts.length;
+    var openingThought = !transition && p.i === 0 && shown.id === 'childs_pose' && state.thoughts.length;
     var cue = openingThought ? 'A thought to sit with — ' + todaysThought() : (m.cue || '');
     ui.cue.textContent = cue;
     ui.cue.classList.toggle('hidden', !cue);
 
-    ui.progress.textContent = (p.i + 1) + ' / ' + p.steps.length;
-    ui.next.textContent = nxt
-      ? 'Next — ' + moveById(nxt.id).name + (nxt.side ? ' · ' + nxt.side : '')
+    ui.progress.textContent = (transition ? p.i + 2 : p.i + 1) + ' / ' + p.steps.length;
+    ui.nextText.textContent = upcoming
+      ? (transition ? 'Then — ' : 'Next — ') + moveById(upcoming.id).name + (upcoming.side ? ' · ' + upcoming.side : '')
       : 'Last one.';
+    paintNextThumb(upcoming && upcoming.id);
+    preload(upcoming && upcoming.id);
+
+    ui.back.textContent = transition ? 'Repeat' : 'Back';
+    ui.skip.textContent = transition ? 'Start now' : 'Skip';
     ui.play.textContent = p.playing ? 'Pause' : 'Resume';
     paintTime();
   }
 
   function paintTime() {
     var p = state.player;
-    var s = p.steps[p.i];
     var left = Math.max(0, Math.ceil(p.left / 1000));
-    ui.time.textContent = fmt(left);
-    var pct = Math.round(((p.i + (1 - p.left / (s.sec * 1000))) / p.steps.length) * 100);
-    ui.fill.style.width = pct + '%';
+    var frac;
+    if (p.phase === 'transition') {
+      ui.time.textContent = String(Math.max(1, left));
+      frac = p.i + 1;
+    } else {
+      ui.time.textContent = fmt(left);
+      frac = p.i + (1 - p.left / (p.steps[p.i].sec * 1000));
+    }
+    ui.fill.style.width = Math.round((frac / p.steps.length) * 100) + '%';
   }
 
   function tick() {
     var p = state.player;
     if (!p || !p.playing || !ui) return;
     var now = Date.now();
-    if (now >= p.endAt) { goStep(p.i + 1); return; }
+    if (now >= p.endAt) {
+      if (p.phase === 'transition') goStep(p.i + 1, true);
+      else beginTransition();
+      return;
+    }
+
+    p.left = p.endAt - now;
+
+    if (p.phase === 'transition') {
+      // The circle draws in as the beat runs out.
+      var t = p.left / (TRANSITION_SEC * 1000);
+      ui.breathFill.style.transform = 'scale(' + (Math.round((0.62 + 0.38 * t) * 1000) / 1000) + ')';
+      ui.breathLabel.textContent = 'Get ready';
+      paintTime();
+      return;
+    }
 
     var r = routineById(p.routineId);
     var b = (r && r.breath) || { cycle: BREATH_CYCLE, inhale: Math.round(BREATH_CYCLE / 2) };
-    var t = ((now - p.breathStart) / 1000) % b.cycle;
-    var inhaling = t < b.inhale;
-    var prog = inhaling ? t / b.inhale : (t - b.inhale) / (b.cycle - b.inhale);
+    var bt = ((now - p.breathStart) / 1000) % b.cycle;
+    var inhaling = bt < b.inhale;
+    var prog = inhaling ? bt / b.inhale : (bt - b.inhale) / (b.cycle - b.inhale);
     var eased = (1 - Math.cos(Math.PI * prog)) / 2;
     var scale = inhaling ? 0.6 + 0.4 * eased : 1 - 0.4 * eased;
 
     ui.breathFill.style.transform = 'scale(' + (Math.round(scale * 1000) / 1000) + ')';
     ui.breathLabel.textContent = inhaling ? 'Inhale' : 'Exhale';
-    p.left = p.endAt - now;
     paintTime();
   }
 
@@ -1037,12 +1408,18 @@
     state.images = d.IMAGES || [];
     state.custom = load('reach.custom', []) || [];
     state.resume = load('reach.resume', null);
+    state.sound = load('reach.sound', true) !== false;
     state.ready = true;
 
-    // A resume entry for a routine that no longer exists is stale.
-    if (state.resume && !routineById(state.resume.id)) {
-      state.resume = null;
-      save('reach.resume', null);
+    // A resume entry only counts if it points at a live routine and a real position
+    // in it. Entries from the old "saved on browse" behaviour have no position.
+    var res = state.resume;
+    var r = res && routineById(res.id);
+    if (!r || typeof res.i !== 'number') {
+      clearResume();
+    } else {
+      var steps = expand(r);
+      if (res.i >= steps.length) clearResume();
     }
 
     render();
