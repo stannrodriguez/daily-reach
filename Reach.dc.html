@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reach</title>
+<style>
+  :root {
+    --ink: #1B1C16;
+    --paper: #F3F5EF;
+    --card: #FBFCF9;
+    --line: #DDE1D6;
+    --muted: #6C7064;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  h1 { font-size: 34px; font-weight: normal; letter-spacing: 0.5px; }
+  .tagline { color: var(--muted); font-size: 15px; font-style: italic; }
+
+  nav { display: flex; gap: 8px; margin-bottom: 32px; border-bottom: 1px solid var(--line); }
+  nav button {
+    appearance: none;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font: inherit;
+    font-size: 16px;
+    color: var(--muted);
+    padding: 10px 18px;
+    cursor: pointer;
+  }
+  nav button.active { color: var(--ink); border-bottom-color: var(--ink); }
+
+  .kind-heading {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin: 36px 0 16px;
+  }
+  .kind-heading:first-child { margin-top: 0; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .card .slot {
+    aspect-ratio: 16 / 10;
+    background: var(--paper);
+    display: block;
+    width: 100%;
+  }
+  .card img.slot { object-fit: cover; }
+  .card .placeholder {
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--paper),
+      var(--paper) 10px,
+      #E9ECE2 10px,
+      #E9ECE2 20px
+    );
+  }
+  .card .body { padding: 14px 16px 18px; }
+  .card h3 { font-size: 18px; font-weight: normal; margin-bottom: 6px; }
+  .card p { font-size: 14px; line-height: 1.5; color: var(--muted); }
+
+  .today-list { display: grid; gap: 20px; max-width: 640px; }
+  .today-note { color: var(--muted); font-style: italic; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Reach</h1>
+    <div class="tagline">a little yoga, a little strength, every day</div>
+  </header>
+
+  <nav>
+    <button id="tab-today" type="button">Today</button>
+    <button id="tab-library" type="button">Library</button>
+  </nav>
+
+  <main id="view"></main>
+</div>
+
+<script src="reach-data.js"></script>
+<script>
+  const imageSet = new Set(IMAGES);
+
+  function cardEl(move) {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    if (imageSet.has(move.id)) {
+      const img = document.createElement("img");
+      img.className = "slot";
+      img.src = "images/" + move.id + ".png";
+      img.alt = move.name;
+      img.loading = "lazy";
+      card.appendChild(img);
+    } else {
+      const ph = document.createElement("div");
+      ph.className = "slot placeholder";
+      card.appendChild(ph);
+    }
+
+    const body = document.createElement("div");
+    body.className = "body";
+    const h3 = document.createElement("h3");
+    h3.textContent = move.name;
+    const p = document.createElement("p");
+    p.textContent = move.text;
+    body.appendChild(h3);
+    body.appendChild(p);
+    card.appendChild(body);
+    return card;
+  }
+
+  function renderLibrary(view) {
+    for (const kind of ["yoga", "calisthenics"]) {
+      const heading = document.createElement("div");
+      heading.className = "kind-heading";
+      heading.textContent = kind;
+      view.appendChild(heading);
+
+      const grid = document.createElement("div");
+      grid.className = "grid";
+      for (const move of MOVES.filter((m) => m.kind === kind)) {
+        grid.appendChild(cardEl(move));
+      }
+      view.appendChild(grid);
+    }
+  }
+
+  function renderToday(view) {
+    const note = document.createElement("p");
+    note.className = "today-note";
+    note.textContent = "Five moves for today. Take them slow.";
+    view.appendChild(note);
+
+    // Deterministic daily pick: seed from the date.
+    const d = new Date();
+    let seed = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+    const rand = () => {
+      seed = (seed * 1103515245 + 12345) % 2147483648;
+      return seed / 2147483648;
+    };
+    const pool = [...MOVES];
+    const picks = [];
+    while (picks.length < 5 && pool.length) {
+      picks.push(pool.splice(Math.floor(rand() * pool.length), 1)[0]);
+    }
+
+    const list = document.createElement("div");
+    list.className = "today-list";
+    for (const move of picks) list.appendChild(cardEl(move));
+    view.appendChild(list);
+  }
+
+  const tabs = {
+    today: { btn: document.getElementById("tab-today"), render: renderToday },
+    library: { btn: document.getElementById("tab-library"), render: renderLibrary },
+  };
+
+  function show(name) {
+    const view = document.getElementById("view");
+    view.innerHTML = "";
+    for (const [key, tab] of Object.entries(tabs)) {
+      tab.btn.classList.toggle("active", key === name);
+    }
+    tabs[name].render(view);
+  }
+
+  tabs.today.btn.addEventListener("click", () => show("today"));
+  tabs.library.btn.addEventListener("click", () => show("library"));
+  show("today");
+</script>
+</body>
+</html>

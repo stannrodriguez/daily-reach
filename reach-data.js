@@ -1,0 +1,338 @@
+// Reach — move library data
+// Each move: { id, name, text, kind: "yoga" | "calisthenics" }
+// Images: images/<id>.png (800x500). Only ids listed in IMAGES render an
+// image in the app; everything else shows the striped placeholder.
+
+const MOVES = [
+  // ------------------------------------------------------------ yoga
+  {
+    id: "childs_pose",
+    name: "Child's Pose",
+    text: "Kneel and fold your torso over your thighs, arms stretched out in front, forehead resting on the floor. Breathe slowly into your back.",
+    kind: "yoga",
+  },
+  {
+    id: "down_dog",
+    name: "Downward Dog",
+    text: "From hands and knees, lift your hips high so your body forms an inverted V, arms and legs long. Press the floor away and let your head hang heavy.",
+    kind: "yoga",
+  },
+  {
+    id: "mountain",
+    name: "Mountain Pose",
+    text: "Stand tall with feet together and arms relaxed at your sides. Lengthen through the crown of your head and ground evenly through both feet.",
+    kind: "yoga",
+  },
+  {
+    id: "forward_fold",
+    name: "Standing Forward Fold",
+    text: "Hinge at the hips and fold your torso over straight or softly bent legs, hands reaching toward the floor. Let your neck release completely.",
+    kind: "yoga",
+  },
+  {
+    id: "halfway_lift",
+    name: "Halfway Lift",
+    text: "From a forward fold, lift your torso to a flat back with fingertips on your shins. Draw your shoulders away from your ears.",
+    kind: "yoga",
+  },
+  {
+    id: "low_lunge",
+    name: "Low Lunge",
+    text: "Step one foot forward between your hands and lower the back knee to the floor, arms reaching overhead. Sink your hips gently forward.",
+    kind: "yoga",
+  },
+  {
+    id: "warrior1",
+    name: "Warrior 1",
+    text: "Lunge with the front knee bent and back leg straight, hips squared forward, arms reaching overhead. Root through the back heel.",
+    kind: "yoga",
+  },
+  {
+    id: "warrior2",
+    name: "Warrior 2",
+    text: "Lunge with the front knee bent over the ankle, arms stretched parallel to the floor in opposite directions. Gaze over the front fingertips.",
+    kind: "yoga",
+  },
+  {
+    id: "triangle",
+    name: "Triangle Pose",
+    text: "With both legs straight and wide, tilt at the hip to rest your lower hand on your shin while the top arm reaches to the sky. Keep both sides of the waist long.",
+    kind: "yoga",
+  },
+  {
+    id: "chair_pose",
+    name: "Chair Pose",
+    text: "Bend your knees and sit your hips back as if into a chair, arms reaching overhead. Keep your weight in your heels.",
+    kind: "yoga",
+  },
+  {
+    id: "tree_pose",
+    name: "Tree Pose",
+    text: "Balance on one leg with the other foot pressed to your inner thigh, arms overhead. Fix your gaze on a still point.",
+    kind: "yoga",
+  },
+  {
+    id: "cobra",
+    name: "Cobra",
+    text: "Lie on your belly and lift your chest with elbows bent and hands under your shoulders. Keep the back of your neck long.",
+    kind: "yoga",
+  },
+  {
+    id: "sphinx",
+    name: "Sphinx Pose",
+    text: "Lie on your belly propped on your forearms, elbows under shoulders, chest lifted. Let your lower back settle softly.",
+    kind: "yoga",
+  },
+  {
+    id: "upward_dog",
+    name: "Upward Dog",
+    text: "Press through straight arms to lift your chest and hips off the floor, tops of the feet down. Roll your shoulders back and open the chest.",
+    kind: "yoga",
+  },
+  {
+    id: "pigeon",
+    name: "Pigeon Pose",
+    text: "Fold one shin forward on the floor while the back leg extends long behind you, torso upright or folded forward. Breathe into the outer hip.",
+    kind: "yoga",
+  },
+  {
+    id: "seated_fold",
+    name: "Seated Forward Fold",
+    text: "Sit with legs extended and fold your torso over your thighs, hands reaching toward your feet. Lead with your chest, not your head.",
+    kind: "yoga",
+  },
+  {
+    id: "butterfly",
+    name: "Butterfly",
+    text: "Sit with the soles of your feet together and knees dropped wide, holding your feet. Sit tall or fold gently forward.",
+    kind: "yoga",
+  },
+  {
+    id: "boat_pose",
+    name: "Boat Pose",
+    text: "Balance on your sit bones with legs lifted and torso leaned back, body forming a V, arms reaching forward. Keep your chest proud.",
+    kind: "yoga",
+  },
+  {
+    id: "happy_baby",
+    name: "Happy Baby",
+    text: "Lie on your back and hold the outsides of your feet with knees drawn wide toward your armpits. Rock gently side to side.",
+    kind: "yoga",
+  },
+  {
+    id: "supine_twist",
+    name: "Supine Twist",
+    text: "Lie on your back and drop bent knees to one side while your shoulders stay grounded, arms wide. Turn your gaze the opposite way.",
+    kind: "yoga",
+  },
+  {
+    id: "side_plank",
+    name: "Side Plank",
+    text: "Balance on one straight arm with your body in a sideways line, feet stacked and top arm reaching up. Lift your hips high.",
+    kind: "yoga",
+  },
+  {
+    id: "cat_cow",
+    name: "Cat–Cow",
+    text: "On hands and knees, alternate between arching your back with chest lifted and rounding your spine toward the ceiling. Move with your breath.",
+    kind: "yoga",
+  },
+  {
+    id: "tabletop_ext",
+    name: "Tabletop Extension",
+    text: "From hands and knees, reach one arm forward and the opposite leg back until both are level with your spine. Return to tabletop and switch sides.",
+    kind: "yoga",
+  },
+  {
+    id: "chaturanga",
+    name: "Chaturanga",
+    text: "From a high plank, bend your elbows straight back to lower halfway, body in one line hovering above the floor. Keep elbows hugged to your ribs.",
+    kind: "yoga",
+  },
+  {
+    id: "knee_to_nose",
+    name: "Knee to Nose",
+    text: "From downward dog, sweep one knee forward toward your nose with your back rounded, then send the leg back and up. Move slowly and controlled.",
+    kind: "yoga",
+  },
+  {
+    id: "neck_rolls",
+    name: "Neck Rolls",
+    text: "Standing tall, drop your ear toward one shoulder and roll your chin slowly across your chest to the other side. Keep the movement small and easy.",
+    kind: "yoga",
+  },
+  {
+    id: "shoulder_rolls",
+    name: "Shoulder Rolls",
+    text: "Standing tall, lift your shoulders toward your ears then roll them back and down in slow circles. Let your arms stay heavy.",
+    kind: "yoga",
+  },
+  {
+    id: "wrist_circles",
+    name: "Wrist Circles",
+    text: "Extend your arms forward and slowly circle your hands from the wrists, first one way then the other. Keep your forearms still.",
+    kind: "yoga",
+  },
+
+  // ---------------------------------------------------- calisthenics
+  {
+    id: "plank",
+    name: "Plank",
+    text: "Hold your body in a straight line from head to heels on your hands or forearms. Brace your core and squeeze your glutes.",
+    kind: "calisthenics",
+  },
+  {
+    id: "dead_hang",
+    name: "Dead Hang",
+    text: "Hang from a bar with straight arms and relaxed shoulders, feet off the floor. Breathe and let your spine decompress.",
+    kind: "calisthenics",
+  },
+  {
+    id: "wall_sit",
+    name: "Wall Sit",
+    text: "Slide your back down a wall until your thighs are parallel to the floor, knees at ninety degrees. Press your whole back into the wall.",
+    kind: "calisthenics",
+  },
+  {
+    id: "hollow_hold",
+    name: "Hollow Hold",
+    text: "Lie on your back and lift your shoulders and straight legs off the floor, arms reaching past your ears, lower back pressed down. Hold the shallow banana shape.",
+    kind: "calisthenics",
+  },
+  {
+    id: "squat",
+    name: "Bodyweight Squat",
+    text: "Stand with feet shoulder width, then bend your knees and sit your hips back and down, arms reaching forward for balance. Drive through your heels to stand.",
+    kind: "calisthenics",
+  },
+  {
+    id: "pushup",
+    name: "Push-Up",
+    text: "From a high plank, bend your elbows to lower your chest toward the floor, then press back up. Keep your body in one rigid line.",
+    kind: "calisthenics",
+  },
+  {
+    id: "incline_pushup",
+    name: "Incline Push-Up",
+    text: "With hands on a raised surface and body in a straight line, bend your elbows to lower your chest to the edge, then press away. The higher the surface, the easier the rep.",
+    kind: "calisthenics",
+  },
+  {
+    id: "knee_pushup",
+    name: "Knee Push-Up",
+    text: "From a plank on your knees, lower your chest toward the floor and press back up, hips staying in line with your shoulders. Keep your core braced.",
+    kind: "calisthenics",
+  },
+  {
+    id: "pike_pushup",
+    name: "Pike Push-Up",
+    text: "From a pike position with hips high, bend your elbows to lower the crown of your head toward the floor, then press back up. Keep your legs straight.",
+    kind: "calisthenics",
+  },
+  {
+    id: "reverse_lunge",
+    name: "Reverse Lunge",
+    text: "From standing, step one foot back and bend both knees until the back knee hovers just above the floor, then drive back up. Keep your torso tall.",
+    kind: "calisthenics",
+  },
+  {
+    id: "split_squat",
+    name: "Split Squat",
+    text: "In a staggered stance, lower straight down until both knees are bent to ninety degrees, then press back up without moving your feet. Keep your weight over the front heel.",
+    kind: "calisthenics",
+  },
+  {
+    id: "shoulder_taps",
+    name: "Shoulder Taps",
+    text: "From a high plank, lift one hand to tap the opposite shoulder, then place it back down and switch. Keep your hips as still as possible.",
+    kind: "calisthenics",
+  },
+  {
+    id: "glute_bridge",
+    name: "Glute Bridge",
+    text: "Lying on your back with knees bent, drive through your heels to lift your hips until your body is straight from shoulders to knees. Squeeze at the top, then lower.",
+    kind: "calisthenics",
+  },
+  {
+    id: "single_leg_bridge",
+    name: "Single-Leg Bridge",
+    text: "From a glute bridge setup, extend one leg and lift your hips with the other, keeping your pelvis level. Lower with control and switch sides.",
+    kind: "calisthenics",
+  },
+  {
+    id: "superman",
+    name: "Superman",
+    text: "Lying face down, lift your arms, chest and legs off the floor at the same time, then lower with control. Reach long through your fingers and toes.",
+    kind: "calisthenics",
+  },
+  {
+    id: "scap_pull",
+    name: "Scap Pull",
+    text: "Hanging from a bar with straight arms, pull your shoulder blades down and together to lift your chest slightly, then release. The arms never bend.",
+    kind: "calisthenics",
+  },
+  {
+    id: "negative_pullup",
+    name: "Negative Pull-Up",
+    text: "Start at the top of a pull-up with your chin over the bar, then lower yourself as slowly as you can to a dead hang. Fight gravity the whole way down.",
+    kind: "calisthenics",
+  },
+  {
+    id: "pullup",
+    name: "Pull-Up",
+    text: "Hanging from a bar with an overhand grip, pull your chin above the bar, then lower with control to straight arms. Lead with your chest, not your chin.",
+    kind: "calisthenics",
+  },
+  {
+    id: "chinup",
+    name: "Chin-Up",
+    text: "Hanging from a bar with an underhand grip, pull your chin above the bar, then lower with control. Keep your elbows tracking toward your ribs.",
+    kind: "calisthenics",
+  },
+  {
+    id: "towel_row",
+    name: "Towel Row",
+    text: "Holding a towel anchored in a door, lean back with straight arms, then pull your chest toward your hands. Squeeze your shoulder blades together.",
+    kind: "calisthenics",
+  },
+  {
+    id: "inverted_row",
+    name: "Inverted Row",
+    text: "Hanging under a low bar with your body straight and heels on the floor, pull your chest up to the bar, then lower with control. The more horizontal you are, the harder it gets.",
+    kind: "calisthenics",
+  },
+  {
+    id: "ytw",
+    name: "Y-T-W",
+    text: "Lying face down, raise your arms overhead in a Y, out to the sides in a T, then bent with elbows drawn back in a W, lifting slightly off the floor in each shape. Move slowly between letters.",
+    kind: "calisthenics",
+  },
+  {
+    id: "hanging_knee_raise",
+    name: "Hanging Knee Raise",
+    text: "Hanging from a bar, draw both knees up toward your chest, then lower your legs with control. Avoid swinging.",
+    kind: "calisthenics",
+  },
+  {
+    id: "chair_dip",
+    name: "Chair Dip",
+    text: "With hands on the edge of a chair behind you and legs extended, bend your elbows to lower your hips, then press back up. Keep your shoulders away from your ears.",
+    kind: "calisthenics",
+  },
+  {
+    id: "knee_raise",
+    name: "Standing Knee Raise",
+    text: "From standing, lift one knee to hip height, then lower and switch sides in a steady march. Stay tall through your spine.",
+    kind: "calisthenics",
+  },
+  {
+    id: "walk_up",
+    name: "Walk-Up",
+    text: "From standing, fold forward and walk your hands out to a high plank, then walk them back and stand up. Keep your legs as straight as comfortable.",
+    kind: "calisthenics",
+  },
+];
+
+// Move ids that have a generated illustration at images/<id>.png.
+// The app only renders images for ids in this list.
+const IMAGES = [];
