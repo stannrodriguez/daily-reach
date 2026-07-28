@@ -394,9 +394,9 @@
   .player .illus {
     position: relative;
     width: 100%;
-    max-width: 320px;
+    max-width: 400px;
     aspect-ratio: 16/10;
-    max-height: 28vh;
+    max-height: 32vh;
     flex: none;
     margin-top: 14px;
     border-radius: 3px;
@@ -624,15 +624,27 @@
   function imagePath(id) {
     return state.images.indexOf(id) > -1 ? 'images/' + id + '.png' : '';
   }
+  // Small slots use the figure-only render; fall back to the full plate
+  // for moves whose thumb hasn't been generated yet.
+  function thumbPath(id) {
+    return state.images.indexOf(id) > -1 ? 'images/thumbs/' + id + '.png' : '';
+  }
+  function withThumbFallback(img, id, onFail) {
+    img.addEventListener('error', function () {
+      var full = imagePath(id);
+      if (full && img.getAttribute('src') !== full) { img.src = full; return; }
+      if (onFail) onFail();
+    });
+  }
   function thumbFor(id, cls) {
     var wrap = el('div', cls || 'thumb');
-    var src = imagePath(id);
+    var src = thumbPath(id);
     if (!src) { wrap.classList.add('empty'); return wrap; }
     var img = el('img');
     img.src = src;
     img.alt = '';
     img.loading = 'lazy';
-    img.addEventListener('error', function () { wrap.classList.add('empty'); });
+    withThumbFallback(img, id, function () { wrap.classList.add('empty'); });
     wrap.appendChild(img);
     return wrap;
   }
@@ -768,10 +780,10 @@
     slot.appendChild(el('div', 'note', 'illustration · ' + m.name.toLowerCase()));
     if (state.images.indexOf(m.id) > -1) {
       var img = el('img');
-      img.src = 'images/' + m.id + '.png';
+      img.src = thumbPath(m.id);
       img.alt = m.name;
       img.loading = 'lazy';
-      img.addEventListener('error', function () { img.style.display = 'none'; });
+      withThumbFallback(img, m.id, function () { img.style.display = 'none'; });
       slot.appendChild(img);
     }
     card.appendChild(slot);
@@ -1236,7 +1248,12 @@
     var nextThumb = el('div', 'thumb');
     var nextThumbImg = el('img');
     nextThumbImg.alt = '';
-    nextThumbImg.addEventListener('error', function () { nextThumb.classList.add('empty'); });
+    nextThumbImg.addEventListener('error', function () {
+      var id = nextThumbImg.getAttribute('data-move') || '';
+      var full = id ? imagePath(id) : '';
+      if (full && nextThumbImg.getAttribute('src') !== full) { nextThumbImg.src = full; return; }
+      nextThumb.classList.add('empty');
+    });
     nextThumb.appendChild(nextThumbImg);
     var nextText = el('span');
     next.appendChild(nextThumb);
@@ -1262,8 +1279,9 @@
   }
 
   function paintNextThumb(id) {
-    var src = id ? imagePath(id) : '';
+    var src = id ? thumbPath(id) : '';
     if (!src) { ui.nextThumb.classList.add('empty'); return; }
+    ui.nextThumbImg.setAttribute('data-move', id);
     if (ui.nextThumbImg.getAttribute('src') !== src) ui.nextThumbImg.setAttribute('src', src);
     ui.nextThumb.classList.remove('empty');
   }
