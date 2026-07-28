@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#F3F5EF"/>
+  <rect x="66" y="58" width="1068" height="514" rx="26" fill="#F8F9F5" stroke="#DCDFD2" stroke-width="2"/>
+  <text x="118" y="244" fill="#1B1C16" font-family="Georgia, serif" font-size="104">Reach</text>
+  <text x="122" y="306" fill="#6E7263" font-family="Georgia, serif" font-size="31" font-style="italic">Everything out of reach is just training away.</text>
+  <line x1="122" y1="360" x2="676" y2="360" stroke="#DCDFD2" stroke-width="2"/>
+  <text x="122" y="417" fill="#8A8E7E" font-family="Arial, sans-serif" font-size="19" letter-spacing="4">MOVE FOR THE TIME YOU HAVE</text>
+  <g font-family="Arial, sans-serif" font-size="21" text-anchor="middle">
+    <rect x="122" y="452" width="104" height="50" rx="25" fill="none" stroke="#C2C6B4" stroke-width="2"/>
+    <text x="174" y="485" fill="#6E7263">3 min</text>
+    <rect x="238" y="452" width="104" height="50" rx="25" fill="none" stroke="#C2C6B4" stroke-width="2"/>
+    <text x="290" y="485" fill="#6E7263">5 min</text>
+    <rect x="354" y="452" width="116" height="50" rx="25" fill="#6D4AA0"/>
+    <text x="412" y="485" fill="#FFFFFF">15 min</text>
+    <rect x="482" y="452" width="116" height="50" rx="25" fill="none" stroke="#C2C6B4" stroke-width="2"/>
+    <text x="540" y="485" fill="#6E7263">28 min</text>
+  </g>
+  <g transform="translate(760 124)">
+    <circle cx="154" cy="190" r="142" fill="none" stroke="#DCD2EC" stroke-width="24"/>
+    <path d="M34 260c54-8 102-42 132-91 27-43 66-67 108-54" fill="none" stroke="#6D4AA0" stroke-width="30" stroke-linecap="round"/>
+    <circle cx="282" cy="114" r="23" fill="#6D4AA0"/>
+  </g>
+</svg>
