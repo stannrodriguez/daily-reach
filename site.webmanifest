@@ -1,0 +1,22 @@
+{
+  "name": "Reach — Mobility & Strength",
+  "short_name": "Reach",
+  "description": "Focused mobility and strength routines for the time you have.",
+  "start_url": "/daily-reach/",
+  "scope": "/daily-reach/",
+  "display": "standalone",
+  "background_color": "#F3F5EF",
+  "theme_color": "#F3F5EF",
+  "icons": [
+    {
+      "src": "/daily-reach/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/daily-reach/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
