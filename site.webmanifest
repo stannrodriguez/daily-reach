@@ -1,7 +1,7 @@
 {
-  "name": "Reach — Mobility & Strength",
+  "name": "Reach: Mobility & Strength",
   "short_name": "Reach",
-  "description": "Focused mobility and strength routines for the time you have.",
+  "description": "Guided mobility and strength routines for the time you have.",
   "start_url": "/daily-reach/",
   "scope": "/daily-reach/",
   "display": "standalone",

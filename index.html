@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Reach</title>
-<meta name="description" content="A time-first mobility and strength library: choose 3, 5, 15, or 28 minutes and start moving." />
+<title>Reach: Movement for the time you have</title>
+<meta name="description" content="Guided mobility and strength routines by time: pick 3, 5, 15, or 28 minutes and start moving, or browse the move library." />
 <meta name="theme-color" content="#F3F5EF" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -15,16 +15,16 @@
 <link rel="apple-touch-icon" href="/daily-reach/apple-touch-icon.png" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Reach" />
-<meta property="og:title" content="Reach — movement for the time you have" />
-<meta property="og:description" content="Focused mobility and strength routines for 3, 5, 15, or 28 minutes." />
+<meta property="og:title" content="Reach: Movement for the time you have" />
+<meta property="og:description" content="Guided mobility and strength routines for 3, 5, 15, or 28 minutes." />
 <meta property="og:url" content="https://stannrodriguez.github.io/daily-reach/" />
 <meta property="og:image" content="https://stannrodriguez.github.io/daily-reach/og-card.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="Reach — movement for the time you have" />
+<meta property="og:image:alt" content="Reach: movement for the time you have, with 3, 5, 15, and 28 minute options" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Reach — movement for the time you have" />
-<meta name="twitter:description" content="Focused mobility and strength routines for 3, 5, 15, or 28 minutes." />
+<meta name="twitter:title" content="Reach: Movement for the time you have" />
+<meta name="twitter:description" content="Guided mobility and strength routines for 3, 5, 15, or 28 minutes." />
 <meta name="twitter:image" content="https://stannrodriguez.github.io/daily-reach/og-card.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -724,7 +724,7 @@
       var res = state.resume;
       var wrap = el('div', 'resume-wrap');
       var resume = btn('resume', null, resumeSession);
-      resume.appendChild(el('div', 'label', 'Continue'));
+      resume.appendChild(el('div', 'label', 'Continue session'));
       resume.appendChild(el('div', 'name', res.name));
 
       var at = el('div', 'at');
@@ -774,8 +774,8 @@
 
   // ——— library ———
   var KINDS = [['all', 'All'], ['yoga', 'Yoga'], ['calisthenics', 'Calisthenics']];
-  var TAGS = [['all', 'Every tag'], ['toe-touch', 'toe-touch'], ['pull-up', 'pull-up'],
-              ['mobility', 'mobility'], ['strength', 'strength'], ['recovery', 'recovery']];
+  var TAGS = [['all', 'All tags'], ['toe-touch', 'Toe-touch'], ['pull-up', 'Pull-up'],
+              ['mobility', 'Mobility'], ['strength', 'Strength'], ['recovery', 'Recovery']];
 
   function kindChips(onPick) {
     var wrap = el('div', 'kinds');
@@ -799,11 +799,11 @@
     var card = el('div', 'move');
 
     var slot = el('div', 'slot');
-    slot.appendChild(el('div', 'note', 'illustration · ' + m.name.toLowerCase()));
+    slot.appendChild(el('div', 'note', 'Illustration: ' + m.name));
     if (state.images.indexOf(m.id) > -1) {
       var img = el('img');
       img.src = thumbPath(m.id);
-      img.alt = m.name;
+      img.alt = m.name + ' illustration';
       img.loading = 'lazy';
       withThumbFallback(img, m.id, function () { img.style.display = 'none'; });
       slot.appendChild(img);
@@ -832,8 +832,8 @@
     head.appendChild(el('div', 'page-title', 'Library'));
     var moves = filteredMoves();
     head.appendChild(el('div', 'count', state.moves.length
-      ? moves.length + ' of ' + state.moves.length + ' moves — read them like a book.'
-      : 'Loading the shelf…'));
+      ? moves.length + ' of ' + state.moves.length + ' moves. Read through or filter by type and tag.'
+      : 'Loading moves…'));
     root.appendChild(head);
 
     root.appendChild(kindChips(render));
@@ -857,7 +857,7 @@
   function renderRoutines() {
     var root = el('div', 'routines');
     root.appendChild(el('div', 'page-title', 'Routines'));
-    root.appendChild(el('div', 'sub', 'Curated playlists of library moves. Start a timer, or just read one.'));
+    root.appendChild(el('div', 'sub', 'Guided sequences built from the move library. Start a timer or read through the steps.'));
 
     var list = el('div', 'routines-list');
     allRoutines().forEach(function (r) {
@@ -895,10 +895,10 @@
     actions.appendChild(btn('btn-primary', canResume ? 'Start over' : 'Start session',
       function () { startPlayer(0); }));
     if (canResume) {
-      actions.appendChild(btn('btn-quiet', 'Resume at ' + (res.i + 1), resumeSession));
+      actions.appendChild(btn('btn-quiet', 'Resume at step ' + (res.i + 1), resumeSession));
     }
     if (r.custom) {
-      actions.appendChild(btn('btn-quiet', 'Delete', function () {
+      actions.appendChild(btn('btn-quiet', 'Delete routine', function () {
         state.custom = state.custom.filter(function (c) { return c.id !== state.routineId; });
         save('reach.custom', state.custom);
         if (state.resume && state.resume.id === state.routineId) clearResume();
@@ -932,7 +932,7 @@
   // ——— builder ———
   function builderHintText() {
     var steps = state.builderSteps;
-    if (!steps.length) return 'Pick moves below to start.';
+    if (!steps.length) return 'Select moves below to add them to your routine.';
     var mins = Math.max(1, Math.round(steps.reduce(function (a, s) { return a + Number(s.sec || 0); }, 0) / 60));
     return steps.length + ' moves · about ' + mins + ' min';
   }
@@ -943,7 +943,7 @@
     root.appendChild(el('div', 'title', 'Build a routine'));
 
     var nameInput = el('input', 'name-input');
-    nameInput.placeholder = 'Name it';
+    nameInput.placeholder = 'Routine name';
     nameInput.value = state.builderName;
     nameInput.addEventListener('input', function () { state.builderName = nameInput.value; });
     root.appendChild(nameInput);
@@ -1003,7 +1003,7 @@
       id: 'c' + Date.now(),
       name: state.builderName.trim() || 'Untitled routine',
       mins: total,
-      note: 'Your routine.',
+      note: 'Custom routine.',
       custom: true,
       checkin: false,
       steps: steps.map(function (s) { return { id: s.id, sec: Number(s.sec) || 30, side: '', reps: '' }; }),
@@ -1292,11 +1292,11 @@
   }
 
   function paintIllus(m) {
-    ui.illusNote.textContent = 'illustration · ' + m.name.toLowerCase();
+    ui.illusNote.textContent = 'Illustration: ' + m.name;
     var src = imagePath(m.id);
     if (!src) { ui.illusImg.classList.add('hidden'); return; }
     if (ui.illusImg.getAttribute('src') !== src) ui.illusImg.setAttribute('src', src);
-    ui.illusImg.alt = m.name;
+    ui.illusImg.alt = m.name + ' illustration';
     ui.illusImg.classList.remove('hidden');
   }
 
@@ -1331,14 +1331,14 @@
     paintIllus(m);
 
     var openingThought = !transition && p.i === 0 && shown.id === 'childs_pose' && state.thoughts.length;
-    var cue = openingThought ? 'A thought to sit with — ' + todaysThought() : (m.cue || '');
+    var cue = openingThought ? 'A thought to sit with: ' + todaysThought() : (m.cue || '');
     ui.cue.textContent = cue;
     ui.cue.classList.toggle('hidden', !cue);
 
     ui.progress.textContent = (transition ? p.i + 2 : p.i + 1) + ' / ' + p.steps.length;
     ui.nextText.textContent = upcoming
-      ? (transition ? 'Then — ' : 'Next — ') + moveById(upcoming.id).name + (upcoming.side ? ' · ' + upcoming.side : '')
-      : 'Last one.';
+      ? (transition ? 'Then: ' : 'Next: ') + moveById(upcoming.id).name + (upcoming.side ? ' · ' + upcoming.side : '')
+      : 'Last move.';
     paintNextThumb(upcoming && upcoming.id);
     preload(upcoming && upcoming.id);
 
